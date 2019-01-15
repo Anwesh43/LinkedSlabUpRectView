@@ -206,4 +206,13 @@ class SlabUpRectView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : SlabUpRectView {
+            val view : SlabUpRectView = SlabUpRectView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
