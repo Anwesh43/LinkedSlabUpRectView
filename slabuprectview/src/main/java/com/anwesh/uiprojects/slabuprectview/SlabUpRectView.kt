@@ -183,4 +183,26 @@ class SlabUpRectView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SlabUpRectView) {
+
+        private val animator : Animator = Animator(view)
+        private val sur : SlabUpRect = SlabUpRect(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            sur.draw(canvas, paint)
+            animator.animate {
+                sur.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            sur.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
