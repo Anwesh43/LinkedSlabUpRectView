@@ -31,21 +31,21 @@ fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b)
 fun Canvas.drawSURNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
-    val gap : Float = w / (nodes + 1)
+    val gap : Float = h / (nodes + 1)
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     paint.color = foreColor
     val size : Float = gap / sizeFactor
-    val xGap : Float = size / (2 * slabs)
+    val xGap : Float = size / (slabs)
     save()
-    translate(gap * (i + 1), h/2 + size/2)
+    translate(w/2, gap * (i + 1) + size)
     rotate(90f * sc2)
-    translate(-size/4, 0f)
+    translate(-size/2, 0f)
     for (j in 0..(slabs - 1)) {
         val sc : Float = sc1.divideScale(j, slabs)
         save()
         translate(xGap * j, 0f)
-        drawRect(RectF(0f, -size * sc, xGap, 0f), paint)
+        drawRect(RectF(0f, -2 * size * sc, xGap, 0f), paint)
         restore()
     }
     restore()
@@ -176,6 +176,9 @@ class SlabUpRectView(ctx : Context) : View(ctx) {
 
         fun update(cb : (Int, Float) -> Unit) {
             curr.update {i, scl ->
+                curr = curr.getNext(dir) {
+                    dir *= -1
+                }
                 cb(i, scl)
             }
         }
